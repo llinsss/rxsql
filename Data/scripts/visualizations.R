@@ -62,4 +62,45 @@ category_sales <- category_sales %>%
   scale_y_continuous(limits = c(0, max(category_sales$profit_margin) * 1.2))
 
 ggsave("outputs/profit_margin_by_category.png", profit_margin_plot, width = 10, height = 6)
+# 4. Sales by Country
+country_sales_plot <- ggplot(country_sales, aes(x = reorder(country, total_revenue), y = total_revenue)) +
+  geom_bar(stat = "identity", fill = "tomato") +
+  geom_text(aes(label = dollar(total_revenue)), hjust = -0.1, color = "black", size = 3.5) +
+  labs(title = "Revenue by Country",
+       x = "Country",
+       y = "Total Revenue ($)") +
+  theme_minimal() +
+  coord_flip() +
+  scale_y_continuous(labels = dollar_format())
+
+ggsave("outputs/country_sales.png", country_sales_plot, width = 10, height = 6)
+
+# 5. Customer Segments
+customer_segments_plot <- ggplot(customer_segments, aes(x = customer_segment, y = total_spent, fill = customer_segment)) +
+  geom_boxplot() +
+  labs(title = "Customer Value Segments",
+       x = "Segment",
+       y = "Total Amount Spent ($)") +
+  theme_minimal() +
+  scale_y_continuous(labels = dollar_format()) +
+  scale_fill_manual(values = c("High Value" = "darkgreen", "Medium Value" = "steelblue", "Low Value" = "tomato"))
+
+ggsave("outputs/customer_segments.png", customer_segments_plot, width = 10, height = 6)
+
+# 6. Top Products by Units Sold
+top_products <- product_popularity %>%
+  arrange(desc(units_sold)) %>%
+  head(10)
+
+product_popularity_plot <- ggplot(top_products, aes(x = reorder(product_name, units_sold), y = units_sold)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  geom_text(aes(label = units_sold), hjust = -0.1, color = "black", size = 3.5) +
+  labs(title = "Top 10 Products by Units Sold",
+       x = "Product",
+       y = "Units Sold") +
+  theme_minimal() +
+  coord_flip()
+
+ggsave("outputs/top_products.png", product_popularity_plot, width = 10, height = 6)
+
 
