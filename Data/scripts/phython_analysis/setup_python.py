@@ -75,3 +75,68 @@ country_sales_plot <- ggplot(country_sales, aes(x = reorder(country, total_reven
   scale_y_continuous(labels = dollar_format())
 
 ggsave("outputs/country_sales.png", country_sales_plot, width = 10, height = 6)
+# 5. Customer Segments
+customer_segments_plot <- ggplot(customer_segments, aes(x = customer_segment, y = total_spent, fill = customer_segment)) +
+  geom_boxplot() +
+  labs(title = "Customer Value Segments",
+       x = "Segment",
+       y = "Total Amount Spent ($)") +
+  theme_minimal() +
+  scale_y_continuous(labels = dollar_format()) +
+  scale_fill_manual(values = c("High Value" = "darkgreen", "Medium Value" = "steelblue", "Low Value" = "tomato"))
+
+ggsave("outputs/customer_segments.png", customer_segments_plot, width = 10, height = 6)
+
+# 6. Top Products by Units Sold
+top_products <- product_popularity %>%
+  arrange(desc(units_sold)) %>%
+  head(10)
+
+product_popularity_plot <- ggplot(top_products, aes(x = reorder(product_name, units_sold), y = units_sold)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  geom_text(aes(label = units_sold), hjust = -0.1, color = "black", size = 3.5) +
+  labs(title = "Top 10 Products by Units Sold",
+       x = "Product",
+       y = "Units Sold") +
+  theme_minimal() +
+  coord_flip()
+
+ggsave("outputs/top_products.png", product_popularity_plot, width = 10, height = 6)
+
+# 7. Age Distribution of Customers
+age_dist_plot <- ggplot(purchase_data, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  labs(title = "Age Distribution of Customers",
+       x = "Age",
+       y = "Count") +
+  theme_minimal()
+
+ggsave("outputs/age_distribution.png", age_dist_plot, width = 10, height = 6)
+
+# 8. Purchase Amount Distribution by Gender
+gender_purchase_plot <- ggplot(purchase_data, aes(x = gender, y = total_spent, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "Purchase Amount Distribution by Gender",
+       x = "Gender",
+       y = "Purchase Amount ($)") +
+  theme_minimal() +
+  scale_y_continuous(labels = dollar_format()) +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink"))
+
+ggsave("outputs/gender_purchases.png", gender_purchase_plot, width = 10, height = 6)
+
+# 9. Category Preferences by Gender
+category_gender_plot <- purchase_data %>%
+  group_by(gender, category) %>%
+  summarize(total_spent = sum(total_spent)) %>%
+  ggplot(aes(x = category, y = total_spent, fill = gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Category Preferences by Gender",
+       x = "Category",
+       y = "Total Spent ($)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = dollar_format()) +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink"))
+
+ggsave("outputs/category_gender_preferences.png", category_gender_plot, width = 10, height = 6)
