@@ -51,3 +51,19 @@ setup_database <- function() {
     # Read and execute the SQL script
     sql_script <- readLines("data/create_database.sql")
     sql_script <- paste(sql_script, collapse = "\n")
+
+    # Split the script into separate statements
+    sql_statements <- strsplit(sql_script, ";")[[1]]
+    
+    # Execute each statement
+    for (statement in sql_statements) {
+      if (trimws(statement) != "") {
+        DBI::dbExecute(conn, statement)
+      }
+    }
+    
+    message("Database initialized successfully")
+  } else {
+    message("Database already exists")
+  }
+  
