@@ -51,3 +51,15 @@ ggsave("outputs/category_sales.png", category_sales_plot, width = 10, height = 6
 # 3. Profit Margin by Category
 category_sales <- category_sales %>%
   mutate(profit_margin = total_profit / total_revenue * 100)
+  profit_margin_plot <- ggplot(category_sales, aes(x = reorder(category, profit_margin), y = profit_margin)) +
+  geom_bar(stat = "identity", fill = "darkgreen") +
+  geom_text(aes(label = sprintf("%.1f%%", profit_margin)), hjust = -0.1, color = "black", size = 3.5) +
+  labs(title = "Profit Margin by Product Category",
+       x = "Category",
+       y = "Profit Margin (%)") +
+  theme_minimal() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, max(category_sales$profit_margin) * 1.2))
+
+ggsave("outputs/profit_margin_by_category.png", profit_margin_plot, width = 10, height = 6)
+
