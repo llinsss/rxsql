@@ -179,4 +179,40 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(ggplot2)
 library(knitr)
 library(scales)
+```# Customer Purchase Analysis
+
+This report presents the analysis of customer purchase data, showcasing key metrics and trends.
+
+## Monthly Sales Trends
+
+```{r monthly-sales, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/monthly_sales_trend.png")
+```
+
+## Product Category Analysis
+
+```{r category-sales, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/category_sales.png")
+```
+
+```{r profit-margin, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/profit_margin_by_category.png")
+```
+
+## Sales by Country
+
+```{r country-sales, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/country_sales.png")
+```
+
+## Customer Segments Analysis
+
+```{r customer-segments, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/customer_segments.png")
+```
+
+## Top Products Analysis
+
+```{r top-products, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/top_products.png")
 ```
