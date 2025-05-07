@@ -215,4 +215,39 @@ knitr::include_graphics("outputs/customer_segments.png")
 
 ```{r top-products, fig.width=10, fig.height=5}
 knitr::include_graphics("outputs/top_products.png")
+``````{r age-distribution, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/age_distribution.png")
 ```
+
+```{r gender-purchases, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/gender_purchases.png")
+```
+
+## Category Preferences
+
+```{r category-gender, fig.width=10, fig.height=5}
+knitr::include_graphics("outputs/category_gender_preferences.png")
+```
+
+```{r category-age, fig.width=12, fig.height=8}
+knitr::include_graphics("outputs/category_age_heatmap.png")
+```'
+  
+  # Write the Rmd file
+  writeLines(rmd_content, "outputs/customer_analysis_report.Rmd")
+  
+  # Render the Rmd file to PDF
+  rmarkdown::render("outputs/customer_analysis_report.Rmd", output_file = "customer_analysis_report.pdf")
+  
+  message("PDF report created at: outputs/customer_analysis_report.pdf")
+  return(TRUE)
+}
+
+# Try to create the PDF report
+tryCatch({
+  create_pdf_report()
+}, error = function(e) {
+  message("Could not create PDF report: ", e$message)
+})
+
+message("All visualizations have been saved to the 'outputs' directory.")
