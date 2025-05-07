@@ -170,3 +170,36 @@ gender_analysis <- purchase_data %>%
     avg_spent_per_customer = total_spent / num_customers
   )
 print(gender_analysis)
+# Product category preferences by demographic
+cat("\n--- Category Preferences by Gender ---\n")
+category_by_gender <- purchase_data %>%
+  group_by(gender, category) %>%
+  summarize(
+    num_purchases = n(),
+    total_spent = sum(total_spent)
+  ) %>%
+  arrange(gender, desc(total_spent))
+print(category_by_gender)
+
+cat("\n--- Category Preferences by Age Group ---\n")
+category_by_age <- purchase_data %>%
+  group_by(age_group, category) %>%
+  summarize(
+    num_purchases = n(),
+    total_spent = sum(total_spent)
+  ) %>%
+  arrange(age_group, desc(total_spent))
+print(category_by_age)
+
+# Save processed data for visualization
+write.csv(purchase_data, "data/processed_purchase_data.csv", row.names = FALSE)
+write.csv(monthly_sales, "data/monthly_sales.csv", row.names = FALSE)
+write.csv(category_sales, "data/category_sales.csv", row.names = FALSE)
+write.csv(country_sales, "data/country_sales.csv", row.names = FALSE)
+write.csv(purchase_frequency, "data/purchase_frequency.csv", row.names = FALSE)
+write.csv(customer_segments, "data/customer_segments.csv", row.names = FALSE)
+write.csv(product_popularity, "data/product_popularity.csv", row.names = FALSE)
+
+# Close the database connection
+dbDisconnect(conn)
+cat("\nAnalysis completed and data saved to CSV files.\n")
