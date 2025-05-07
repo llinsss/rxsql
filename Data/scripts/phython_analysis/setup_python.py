@@ -63,3 +63,15 @@ profit_margin_plot <- ggplot(category_sales, aes(x = reorder(category, profit_ma
   scale_y_continuous(limits = c(0, max(category_sales$profit_margin) * 1.2))
 
 ggsave("outputs/profit_margin_by_category.png", profit_margin_plot, width = 10, height = 6)
+# 4. Sales by Country
+country_sales_plot <- ggplot(country_sales, aes(x = reorder(country, total_revenue), y = total_revenue)) +
+  geom_bar(stat = "identity", fill = "tomato") +
+  geom_text(aes(label = dollar(total_revenue)), hjust = -0.1, color = "black", size = 3.5) +
+  labs(title = "Revenue by Country",
+       x = "Country",
+       y = "Total Revenue ($)") +
+  theme_minimal() +
+  coord_flip() +
+  scale_y_continuous(labels = dollar_format())
+
+ggsave("outputs/country_sales.png", country_sales_plot, width = 10, height = 6)
