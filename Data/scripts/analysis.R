@@ -199,7 +199,3 @@ write.csv(country_sales, "data/country_sales.csv", row.names = FALSE)
 write.csv(purchase_frequency, "data/purchase_frequency.csv", row.names = FALSE)
 write.csv(customer_segments, "data/customer_segments.csv", row.names = FALSE)
 write.csv(product_popularity, "data/product_popularity.csv", row.names = FALSE)
-
-# Close the database connection
-dbDisconnect(conn)
-cat("\nAnalysis completed and data saved to CSV files.\n")
