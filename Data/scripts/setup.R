@@ -66,4 +66,20 @@ setup_database <- function() {
   } else {
     message("Database already exists")
   }
-  
+  # Return the connection
+  return(conn)
+}
+
+# Setup the database and return the connection
+conn <- setup_database()
+
+# Test the connection by listing tables
+tables <- DBI::dbListTables(conn)
+message("Database contains the following tables:")
+print(tables)
+
+# Close the connection
+DBI::dbDisconnect(conn)
+message("Database connection closed")
+
+message("Setup completed successfully")
