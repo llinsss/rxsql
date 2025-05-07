@@ -107,3 +107,66 @@ print(customer_segments)
 # 8. Product popularity
 cat("\n--- Product Popularity ---\n")
 product_popularity_query <- "
+SELECT 
+    pr.product_id,
+    pr.product_name,
+    pr.category,
+    COUNT(*) as num_purchases,
+    SUM(p.quantity) as units_sold,
+    SUM(pr.price * p.quantity) as total_revenue
+FROM 
+    purchases p
+JOIN 
+    products pr ON p.product_id = pr.product_id
+GROUP BY 
+    pr.product_id
+ORDER BY 
+    units_sold DESC
+"
+product_popularity <- run_query(conn, product_popularity_query)
+print(product_popularity)
+
+# 9. Now use R for more advanced analysis
+# Convert purchase_date to proper date format
+purchase_data$purchase_date <- as.Date(purchase_data$purchase_date)
+
+# Add month field for time series analysis
+purchase_data$month <- format(purchase_data$purchase_date, "%Y-%m")
+
+# Monthly sales trends
+cat("\n--- Monthly Sales Trends ---\n")
+monthly_sales <- purchase_data %>%
+  group_by(month) %>%
+  summarize(
+    total_sales = sum(total_spent),
+    num_purchases = n(),
+    avg_order_value = total_sales / num_purchases
+  )
+print(monthly_sales)
+
+# Age group analysis
+cat("\n--- Age Group Analysis ---\n")
+purchase_data$age_group <- cut(purchase_data$age, 
+                              breaks = c(0, 25, 35, 45, 55, 100),
+                              labels = c("18-25", "26-35", "36-45", "46-55", "56+"))
+
+age_analysis <- purchase_data %>%
+  group_by(age_group) %>%
+  summarize(
+    num_purchases = n(),
+    total_spent = sum(total_spent),
+    avg_order_value = total_spent / num_purchases
+  )
+print(age_analysis)
+
+# Gender analysis
+cat("\n--- Gender Analysis ---\n")
+gender_analysis <- purchase_data %>%
+  group_by(gender) %>%
+  summarize(
+    num_customers = n_distinct(customer_id),
+    num_purchases = n(),
+    total_spent = sum(total_spent),
+    avg_spent_per_customer = total_spent / num_customers
+  )
+print(gender_analysis)
