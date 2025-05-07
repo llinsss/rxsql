@@ -34,3 +34,20 @@ setup_database <- function() {
     dir.create("data")
     message("Created 'data' directory")
   }
+  # Check if the outputs directory exists, if not create it
+  if (!dir.exists("outputs")) {
+    dir.create("outputs")
+    message("Created 'outputs' directory")
+  }
+  
+  # Create database connection
+  db_path <- "data/customer_db.sqlite"
+  conn <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  
+  # Check if the database needs to be initialized
+  if (!file.exists(db_path) || file.size(db_path) == 0) {
+    message("Initializing the database...")
+    
+    # Read and execute the SQL script
+    sql_script <- readLines("data/create_database.sql")
+    sql_script <- paste(sql_script, collapse = "\n")
