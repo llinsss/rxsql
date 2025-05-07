@@ -140,3 +140,43 @@ category_gender_plot <- purchase_data %>%
   scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink"))
 
 ggsave("outputs/category_gender_preferences.png", category_gender_plot, width = 10, height = 6)
+# 10. Heatmap of Product Category vs Age Group
+heatmap_data <- purchase_data %>%
+  group_by(age_group, category) %>%
+  summarize(total_spent = sum(total_spent)) %>%
+  ungroup()
+
+heatmap_plot <- ggplot(heatmap_data, aes(x = category, y = age_group, fill = total_spent)) +
+  geom_tile() +
+  geom_text(aes(label = dollar(total_spent)), color = "black", size = 3) +
+  labs(title = "Heatmap: Product Category vs Age Group",
+       x = "Category",
+       y = "Age Group",
+       fill = "Total Spent") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_gradient(low = "white", high = "red", labels = dollar_format())
+
+ggsave("outputs/category_age_heatmap.png", heatmap_plot, width = 12, height = 8)
+
+# Create a PDF report combining all visualizations
+create_pdf_report <- function() {
+  # Check if rmarkdown package is available
+  if (!require("rmarkdown", quietly = TRUE)) {
+    warning("rmarkdown package is not available. Cannot create PDF report.")
+    return(FALSE)
+  }
+  
+  # Create an Rmd file for the report
+  rmd_content <- '---
+title: "Customer Purchase Analysis Report"
+date: "`r format(Sys.Date(), "%B %d, %Y")`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(knitr)
+library(scales)
+```
